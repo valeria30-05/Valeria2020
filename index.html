@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educador Profesional - Diseño UI/UX Minimalista</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans para texto y Fraunces para títulos elegantes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        hueso: {
+                            50: '#FCFBF9',
+                            100: '#FAF9F5',
+                            200: '#F4F1EA',
+                            300: '#EAE5D9',
+                        },
+                        marino: {
+                            50: '#F0F4F8',
+                            800: '#11223F',
+                            900: '#0B1E36',
+                            DEFAULT: '#0B1E36',
+                        },
+                        mostaza: {
+                            100: '#FEF9EC',
+                            400: '#F4B942',
+                            500: '#D99E32',
+                            600: '#B88121',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Fraunces"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Deshabilitar outline por defecto en clics pero mantener accesibilidad */
+        button:focus-visible, a:focus-visible {
+            outline: 2px solid #D99E32;
+            outline-offset: 2px;
+        }
+        /* Transiciones fluidas globales */
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+        }
+    </style>
+</head>
+<body class="bg-hueso-100 text-marino font-sans selection:bg-mostaza-400/30 selection:text-marino">
+
+    <!-- NAV BAR -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 bg-hueso-100/90 backdrop-blur-md border-b border-hueso-300">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+            <!-- Logo / Brand -->
+            <a href="#hero" class="flex items-center space-x-2 text-marino group" aria-label="Volver al inicio">
+                <span class="font-serif text-2xl font-black tracking-tight group-hover:text-mostaza-500">M. <span class="font-sans text-sm tracking-widest uppercase font-bold text-marino-800 ml-1">Educación</span></span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-10 text-sm font-semibold tracking-wide" aria-label="Navegación Principal">
+                <a href="#sobre-mi" class="hover:text-mostaza-500 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-mostaza-500 hover:after:w-full after:transition-all">Sobre Mí</a>
+                <a href="#servicios" class="hover:text-mostaza-500 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-mostaza-500 hover:after:w-full after:transition-all">Servicios</a>
+                <a href="#portafolio" class="hover:text-mostaza-500 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-mostaza-500 hover:after:w-full after:transition-all">Portafolio</a>
+                <a href="#testimonios" class="hover:text-mostaza-500 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-mostaza-500 hover:after:w-full after:transition-all">Testimonios</a>
+                <button onclick="toggleUxSpecs()" class="text-xs bg-marino-800 text-hueso-100 px-3 py-1.5 rounded-full hover:bg-mostaza-500 hover:text-marino transition-all flex items-center space-x-1.5 font-medium" title="Ver decisiones UI/UX de este diseño">
+                    <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                    <span>UI/UX Specs</span>
+                </button>
+            </nav>
+
+            <!-- Desktop CTA -->
+            <div class="hidden md:flex items-center">
+                <a href="#contacto" class="px-6 py-3 bg-marino text-hueso-100 hover:bg-mostaza-500 hover:text-marino font-bold text-sm rounded-lg shadow-sm hover:shadow transition-all duration-300">
+                    Agendar Consultoría
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-marino focus:outline-none p-2 rounded-lg hover:bg-hueso-200" aria-label="Abrir menú">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-hueso-100 border-b border-hueso-300 px-6 py-8 space-y-6 absolute left-0 w-full shadow-lg">
+            <nav class="flex flex-col space-y-4 text-base font-semibold" aria-label="Navegación Móvil">
+                <a href="#sobre-mi" class="hover:text-mostaza-500" onclick="closeMobileMenu()">Sobre Mí</a>
+                <a href="#servicios" class="hover:text-mostaza-500" onclick="closeMobileMenu()">Servicios</a>
+                <a href="#portafolio" class="hover:text-mostaza-500" onclick="closeMobileMenu()">Portafolio</a>
+                <a href="#testimonios" class="hover:text-mostaza-500" onclick="closeMobileMenu()">Testimonios</a>
+                <a href="#contacto" class="hover:text-mostaza-500" onclick="closeMobileMenu()">Contacto</a>
+                <button onclick="toggleUxSpecs(); closeMobileMenu();" class="text-sm bg-marino text-hueso-100 px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                    <span>Mostrar Notas UI/UX</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- UI/UX SPECIFICATION DRAWER -->
+    <div id="ux-specs-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-marino-900 text-hueso-50 z-[100] translate-x-full shadow-2xl overflow-y-auto transition-transform duration-500 ease-in-out">
+        <div class="p-8">
+            <div class="flex items-center justify-between border-b border-marino-800 pb-4 mb-6">
+                <h3 class="font-serif text-xl font-bold text-mostaza-400 flex items-center gap-2">
+                    <i data-lucide="layout-template"></i> UI/UX Design System
+                </h3>
+                <button onclick="toggleUxSpecs()" class="p-2 text-hueso-300 hover:text-white rounded-lg hover:bg-marino-800" aria-label="Cerrar panel de especificaciones">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="space-y-6 text-sm leading-relaxed text-hueso-200">
+                <p>Este sistema de diseño ha sido desarrollado aplicando principios rigurosos de usabilidad y jerarquía visual para educadores digitales:</p>
+
+                <!-- Color Strategy -->
+                <div class="bg-marino-800/50 p-4 rounded-xl border border-marino-800">
+                    <h4 class="font-bold text-mostaza-400 mb-2 uppercase tracking-wider text-xs">Paleta de Colores (60-30-10)</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded bg-hueso-100 border border-marino-800 block"></span>
+                            <span><strong>60% Blanco Hueso (#FAF9F5):</strong> Fondo limpio que reduce la fatiga visual. Aporta sofisticación y simula una página académica física.</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded bg-marino block"></span>
+                            <span><strong>30% Azul Marino (#0B1E36):</strong> Aporta credibilidad académica, profundidad y excelente lectura en textos corporativos.</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-4 h-4 rounded bg-mostaza-500 block"></span>
+                            <span><strong>10% Amarillo Mostaza (#D99E32):</strong> Color de acento con alto contraste y accesibilidad WCAG que destaca los CTAs primarios y elementos de interacción.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Typography -->
+                <div class="bg-marino-800/50 p-4 rounded-xl border border-marino-800">
+                    <h4 class="font-bold text-mostaza-400 mb-2 uppercase tracking-wider text-xs">Jerarquía Tipográfica</h4>
+                    <p class="text-xs">Se utiliza la tipografía Serif <strong>Fraunces</strong> para los encabezados principales, otorgando elegancia, herencia cultural e intelecto. Los párrafos y elementos funcionales usan <strong>Plus Jakarta Sans</strong>, una fuente geométrica que mejora la legibilidad en pantallas retina y móviles.</p>
+                </div>
+
+                <!-- White Space -->
+                <div class="bg-marino-800/50 p-4 rounded-xl border border-marino-800">
+                    <h4 class="font-bold text-mostaza-400 mb-2 uppercase tracking-wider text-xs">Espacio Negativo (White Space)</h4>
+                    <p class="text-xs">Uso de espaciado amplio (`py-24` a `py-32` en escritorio) que le da "respiración" al contenido. Esto evita la saturación de información, mejorando los ratios de retención y comprensión del estudiante o cliente potencial.</p>
+                </div>
+
+                <!-- Accessibility -->
+                <div class="bg-marino-800/50 p-4 rounded-xl border border-marino-800">
+                    <h4 class="font-bold text-mostaza-400 mb-2 uppercase tracking-wider text-xs">Accesibilidad (a11y)</h4>
+                    <p class="text-xs">Contraste de lectura verificado (4.5:1 mínimo para textos normales), etiquetas semánticas HTML, enfoques con teclado explícitos, y adaptación móvil fluida con gestos táctiles optimizados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative pt-36 pb-24 md:py-36 min-h-screen flex items-center overflow-hidden">
+        <!-- Abstract Background shapes for clean/minimalist depth -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-40">
+            <div class="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-mostaza-100 blur-[120px]"></div>
+            <div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-marino-50 blur-[100px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <!-- Hero Left: Text Content -->
+            <div class="lg:col-span-7 flex flex-col justify-center space-y-8">
+                <!-- Tagline -->
+                <div class="inline-flex items-center space-x-2 bg-mostaza-100 text-mostaza-600 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider max-w-fit">
+                    <span class="w-2 h-2 rounded-full bg-mostaza-500 animate-pulse"></span>
+                    <span>Formación de Alto Impacto</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-marino leading-[1.1] tracking-tight">
+                    Transforma tu mente. <br class="hidden sm:inline">
+                    <span class="font-bold italic text-mostaza-500">Domina</span> las habilidades del futuro.
+                </h1>
+
+                <!-- Subheading / Value Prop -->
+                <p class="text-lg md:text-xl text-marino-800 font-light leading-relaxed max-w-xl">
+                    Mentoría y metodologías ágiles de aprendizaje diseñadas para profesionales que buscan liderar el entorno digital a través del conocimiento técnico estratégico.
+                </p>
+
+                <!-- CTA Action Group -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <a href="#contacto" class="px-8 py-4 bg-marino text-hueso-100 hover:bg-mostaza-500 hover:text-marino text-center font-bold text-base rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-3">
+                        Explorar Cursos
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#sobre-mi" class="px-8 py-4 bg-transparent text-marino border border-marino/30 hover:border-marino hover:bg-hueso-200 text-center font-bold text-base rounded-xl flex items-center justify-center gap-3">
+                        Conoce mi Filosofía
+                    </a>
+                </div>
+
+                <!-- Social proof / mini metrics -->
+                <div class="pt-8 border-t border-hueso-300 grid grid-cols-3 gap-6">
+                    <div>
+                        <span class="block font-serif text-3xl sm:text-4xl font-bold text-marino">10K+</span>
+                        <span class="text-xs text-marino/70 font-semibold tracking-wider uppercase">Estudiantes</span>
+                    </div>
+                    <div>
+                        <span class="block font-serif text-3xl sm:text-4xl font-bold text-marino">15+</span>
+                        <span class="text-xs text-marino/70 font-semibold tracking-wider uppercase">Años de Exp.</span>
+                    </div>
+                    <div>
+                        <span class="block font-serif text-3xl sm:text-4xl font-bold text-marino">98%</span>
+                        <span class="text-xs text-marino/70 font-semibold tracking-wider uppercase">Satisfacción</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Right: Editorial Graphic -->
+            <div class="lg:col-span-5 relative mt-8 lg:mt-0">
+                <!-- Design Box -->
+                <div class="relative mx-auto max-w-sm sm:max-w-md lg:max-w-none">
+                    <!-- Geometric frames simulating editorial poster -->
+                    <div class="absolute inset-0 bg-mostaza-500 rounded-3xl translate-x-4 translate-y-4 -z-10 opacity-90"></div>
+                    <div class="bg-marino text-hueso-100 p-8 sm:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+                        <!-- Abstract Grid Overlay -->
+                        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#F5F2EB 1px, transparent 1px); background-size: 24px 24px;"></div>
+                        
+                        <!-- Mini Interactive Showcase Box inside Hero -->
+                        <div class="relative z-10 flex flex-col h-full justify-between space-y-8">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs tracking-widest font-bold text-mostaza-400 uppercase">Clase Destacada</span>
+                                <span class="bg-hueso-100/10 px-3 py-1 rounded-full text-[10px] text-hueso-100">En Vivo 🔴</span>
+                            </div>
+                            
+                            <div>
+                                <h3 class="font-serif text-2xl sm:text-3xl font-light mb-2 leading-snug">Metodologías de Aprendizaje Activo</h3>
+                                <p class="text-sm text-hueso-300 font-light">Estrategias cognitivas para acelerar la asimilación del conocimiento técnico complejo en un 40%.</p>
+                            </div>
+
+                            <div class="pt-6 border-t border-hueso-200/20 flex items-center justify-between">
+                                <div class="flex -space-x-3">
+                                    <div class="w-8 h-8 rounded-full bg-mostaza-500 flex items-center justify-center text-xs font-bold text-marino border-2 border-marino">A</div>
+                                    <div class="w-8 h-8 rounded-full bg-hueso-300 flex items-center justify-center text-xs font-bold text-marino border-2 border-marino">G</div>
+                                    <div class="w-8 h-8 rounded-full bg-marino-500 flex items-center justify-center text-xs font-bold text-hueso-100 border-2 border-marino">L</div>
+                                </div>
+                                <button onclick="window.location.hash = '#contacto'" class="text-xs font-bold text-mostaza-400 hover:text-hueso-100 flex items-center gap-1 group">
+                                    Reservar lugar <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT ME (SOBRE MÍ) -->
+    <section id="sobre-mi" class="py-24 md:py-32 bg-hueso-200 border-y border-hueso-300">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+                <!-- Left: Profile Conceptual Presentation (Mockup) -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative w-full aspect-square max-w-sm mx-auto bg-hueso-100 rounded-2xl border-4 border-marino overflow-hidden shadow-xl p-8 flex flex-col justify-between">
+                        <!-- Abstract Aesthetic elements representing education -->
+                        <div class="absolute right-4 top-4 opacity-10">
+                            <i data-lucide="book-open" class="w-32 h-32 text-marino"></i>
+                        </div>
+                        <div>
+                            <div class="w-12 h-12 rounded-full bg-mostaza-100 flex items-center justify-center mb-6">
+                                <i data-lucide="award" class="text-mostaza-600 w-6 h-6"></i>
+                            </div>
+                            <h4 class="font-serif text-3xl font-bold text-marino mb-1">M. Solares</h4>
+                            <p class="text-sm text-mostaza-600 font-bold tracking-widest uppercase">Pedagogía y Tecnología</p>
+                        </div>
+                        
+                        <div class="space-y-4 pt-6 border-t border-hueso-300">
+                            <p class="text-xs text-marino/70 italic">"La educación no se trata de llenar un balde vacío, sino de encender una llama que inspire a otros a buscar su propio camino."</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                                <span class="text-xs font-bold text-marino/90">Disponible para Consultorías Internacionales</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Text & Tabs Content -->
+                <div class="lg:col-span-7 space-y-8">
+                    <div>
+                        <span class="text-xs tracking-widest font-bold text-mostaza-500 uppercase block mb-2">MI FILOSOFÍA</span>
+                        <h2 class="font-serif text-4xl sm:text-5xl font-light text-marino tracking-tight">
+                            Enseñando a pensar, <br><span class="font-bold">no a memorizar.</span>
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4 text-marino-800 text-base leading-relaxed">
+                        <p>
+                            Como especialista en diseño instruccional y metodologías de educación de vanguardia, me dedico a construir puentes cognitivos entre la teoría compleja y la práctica empresarial cotidiana.
+                        </p>
+                        <p class="font-light">
+                            Mi enfoque metodológico combina principios ágiles, aprendizaje basado en retos reales y herramientas interactivas, garantizando que el conocimiento se consolide y se convierta inmediatamente en una ventaja competitiva útil.
+                        </p>
+                    </div>
+
+                    <!-- Interactive About Me Tabs -->
+                    <div class="pt-4">
+                        <div class="flex border-b border-hueso-300">
+                            <button onclick="switchTab('tab-metodo')" id="btn-tab-metodo" class="px-6 py-3 text-sm font-bold border-b-2 border-mostaza-500 text-marino">
+                                Mi Método
+                            </button>
+                            <button onclick="switchTab('tab-trayectoria')" id="btn-tab-trayectoria" class="px-6 py-3 text-sm font-semibold border-b-2 border-transparent text-marino/60 hover:text-marino">
+                                Trayectoria
+                            </button>
+                        </div>
+                        
+                        <!-- Tab Content 1 -->
+                        <div id="tab-metodo" class="pt-6 space-y-4">
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-mostaza-100 p-2.5 rounded-lg text-mostaza-600 shrink-0 mt-1">
+                                    <i data-lucide="activity" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-marino text-base">Aprendizaje Micro-Modular</h4>
+                                    <p class="text-sm text-marino-800/80">Contenido distribuido en pequeños fragmentos con alta densidad informativa y sin relleno innecesario.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-mostaza-100 p-2.5 rounded-lg text-mostaza-600 shrink-0 mt-1">
+                                    <i data-lucide="target" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-marino text-base">Feedback Inmediato</h4>
+                                    <p class="text-sm text-marino-800/80">Mentoría activa donde cada error del alumno se utiliza como catalizador de su comprensión conceptual.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content 2 (Hidden by Default) -->
+                        <div id="tab-trayectoria" class="pt-6 space-y-4 hidden">
+                            <div class="relative border-l-2 border-hueso-300 pl-6 ml-3 space-y-6">
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-mostaza-500 border-4 border-hueso-200"></span>
+                                    <span class="text-xs font-bold text-mostaza-600">2020 - Presente</span>
+                                    <h5 class="font-bold text-marino">Director Académico Digital</h5>
+                                    <p class="text-xs text-marino/70">Consultor principal de arquitectura pedagógica para startups líderes de LATAM.</p>
+                                </div>
+                                <div class="relative">
+                                    <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-mostaza-500 border-4 border-hueso-200"></span>
+                                    <span class="text-xs font-bold text-mostaza-600">2014 - 2020</span>
+                                    <h5 class="font-bold text-marino">Catedrático de Posgrados de Innovación</h5>
+                                    <p class="text-xs text-marino/70">Diseño de planes curriculares enfocados en transformación digital y pedagogías interactivas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="servicios" class="py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <!-- Header section with plenty of negative space -->
+            <div class="max-w-3xl mb-16 md:mb-24">
+                <span class="text-xs tracking-widest font-bold text-mostaza-500 uppercase block mb-2">QUÉ OFREZCO</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-light text-marino leading-tight tracking-tight">
+                    Programas educativos diseñados para <span class="font-bold italic">impactar a escala.</span>
+                </h2>
+                <p class="text-lg text-marino-800/80 font-light mt-4">
+                    Soluciones de formación a medida diseñadas para potenciar el talento, optimizar recursos y estructurar habilidades de forma profesional.
+                </p>
+            </div>
+
+            <!-- Service Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+                <!-- Card 1 -->
+                <div class="bg-hueso-100 border border-hueso-300 hover:border-mostaza-400 p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+                    <div class="space-y-6">
+                        <div class="w-12 h-12 rounded-xl bg-mostaza-100 flex items-center justify-center text-mostaza-600 group-hover:bg-mostaza-500 group-hover:text-marino transition-all">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-marino group-hover:text-mostaza-600">Mentoría 1-a-1 Directa</h3>
+                        <p class="text-sm text-marino-800/80 leading-relaxed font-light">
+                            Sesiones personalizadas de consultoría estratégica y desarrollo profesional acelerado. Diseñamos juntos tu hoja de ruta educativa adaptada a tu propio ritmo e intereses.
+                        </p>
+                    </div>
+                    <div class="pt-8 mt-8 border-t border-hueso-200 flex items-center justify-between">
+                        <span class="text-xs font-bold text-marino/50">Desde $120 USD / Sesión</span>
+                        <a href="#contacto" class="text-xs font-bold text-marino group-hover:text-mostaza-500 flex items-center gap-1">
+                            Saber más <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-marino text-hueso-100 p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden group">
+                    <!-- Subtle highlight indicator for the 'popular' service -->
+                    <div class="absolute top-0 right-0 bg-mostaza-500 text-marino text-[10px] font-bold tracking-widest uppercase py-1 px-4 rounded-bl-xl">
+                        Más Popular
+                    </div>
+                    <div class="space-y-6">
+                        <div class="w-12 h-12 rounded-xl bg-hueso-100/10 flex items-center justify-center text-mostaza-400 group-hover:bg-mostaza-500 group-hover:text-marino transition-all">
+                            <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-hueso-100">Bootcamps Corporativos</h3>
+                        <p class="text-sm text-hueso-300 leading-relaxed font-light">
+                            Programas intensivos de capacitación grupal in-company enfocados en transformación digital, liderazgo instructivo y metodologías de gestión técnica ágil.
+                        </p>
+                    </div>
+                    <div class="pt-8 mt-8 border-t border-hueso-200/10 flex items-center justify-between">
+                        <span class="text-xs font-bold text-mostaza-400">Cotización personalizada</span>
+                        <a href="#contacto" class="text-xs font-bold text-hueso-100 group-hover:text-mostaza-400 flex items-center gap-1">
+                            Cotizar <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-hueso-100 border border-hueso-300 hover:border-mostaza-400 p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between h-full group">
+                    <div class="space-y-6">
+                        <div class="w-12 h-12 rounded-xl bg-mostaza-100 flex items-center justify-center text-mostaza-600 group-hover:bg-mostaza-500 group-hover:text-marino transition-all">
+                            <i data-lucide="laptop" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold text-marino group-hover:text-mostaza-600">Creación Curricular</h3>
+                        <p class="text-sm text-marino-800/80 leading-relaxed font-light">
+                            Auditoría de contenido, diseño pedagógico digital y estructuración de infoproductos académicos optimizados para retención, experiencia del usuario y fidelización.
+                        </p>
+                    </div>
+                    <div class="pt-8 mt-8 border-t border-hueso-200 flex items-center justify-between">
+                        <span class="text-xs font-bold text-marino/50">Proyectos a Medida</span>
+                        <a href="#contacto" class="text-xs font-bold text-marino group-hover:text-mostaza-500 flex items-center gap-1">
+                            Saber más <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO SECTION -->
+    <section id="portafolio" class="py-24 md:py-32 bg-hueso-200 border-t border-hueso-300">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <!-- Header + Interactive Filter Navigation -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+                <div class="max-w-xl">
+                    <span class="text-xs tracking-widest font-bold text-mostaza-500 uppercase block mb-2">MI TRABAJO</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-light text-marino leading-tight tracking-tight">
+                        Historias de <span class="font-bold">impacto pedagógico.</span>
+                    </h2>
+                </div>
+                
+                <!-- Filters tabs -->
+                <div class="flex flex-wrap gap-2 text-sm">
+                    <button onclick="filterPortfolio('all')" id="filter-all" class="px-5 py-2 rounded-full font-bold bg-marino text-hueso-100 shadow-sm">
+                        Todos
+                    </button>
+                    <button onclick="filterPortfolio('cursos')" id="filter-cursos" class="px-5 py-2 rounded-full font-semibold bg-hueso-100 hover:bg-mostaza-100 hover:text-marino text-marino/70 border border-hueso-300">
+                        Cursos
+                    </button>
+                    <button onclick="filterPortfolio('consultoria')" id="filter-consultoria" class="px-5 py-2 rounded-full font-semibold bg-hueso-100 hover:bg-mostaza-100 hover:text-marino text-marino/70 border border-hueso-300">
+                        Consultoría
+                    </button>
+                    <button onclick="filterPortfolio('recursos')" id="filter-recursos" class="px-5 py-2 rounded-full font-semibold bg-hueso-100 hover:bg-mostaza-100 hover:text-marino text-marino/70 border border-hueso-300">
+                        Guías Gratuitas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Portfolio Projects Grid -->
+            <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 (Cursos) -->
+                <div class="portfolio-item bg-hueso-100 rounded-2xl overflow-hidden border border-hueso-300 group hover:shadow-xl transition-all duration-300" data-category="cursos">
+                    <!-- Project Graphic Placeholder with clean SVGs -->
+                    <div class="h-56 bg-marino relative flex items-center justify-center p-8 overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+                        <i data-lucide="cpu" class="w-20 h-20 text-mostaza-400 opacity-60"></i>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-mostaza-600 bg-mostaza-100 px-3 py-1 rounded-full">Curso Destacado</span>
+                        <h3 class="font-serif text-xl font-bold text-marino">Arquitectura Web para Educadores</h3>
+                        <p class="text-xs text-marino-800/80 font-light leading-relaxed">
+                            Curso práctico online diseñado para estructurar sistemas de e-learning utilizando arquitecturas JAMstack robustas y modulares.
+                        </p>
+                        <div class="pt-4 border-t border-hueso-300 flex justify-between items-center text-xs">
+                            <span class="font-semibold text-marino">Caso de Éxito</span>
+                            <span class="text-marino/60 font-light"> +3,400 Graduados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 (Consultoría) -->
+                <div class="portfolio-item bg-hueso-100 rounded-2xl overflow-hidden border border-hueso-300 group hover:shadow-xl transition-all duration-300" data-category="consultoria">
+                    <div class="h-56 bg-gradient-to-br from-marino-800 to-marino-950 relative flex items-center justify-center p-8 overflow-hidden">
+                        <div class="absolute inset-0 opacity-5" style="background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000); background-size:30px 30px; background-position:0 0, 15px 15px;"></div>
+                        <i data-lucide="globe" class="w-20 h-20 text-mostaza-400 opacity-60"></i>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-mostaza-600 bg-mostaza-100 px-3 py-1 rounded-full">Consultoría Corporativa</span>
+                        <h3 class="font-serif text-xl font-bold text-marino">Reestructuración Pedagógica EdTech</h3>
+                        <p class="text-xs text-marino-800/80 font-light leading-relaxed">
+                            Rediseño de los itinerarios de aprendizaje para una plataforma SaaS educativa internacional, reduciendo el abandono de alumnos un 22%.
+                        </p>
+                        <div class="pt-4 border-t border-hueso-300 flex justify-between items-center text-xs">
+                            <span class="font-semibold text-marino">Consultoría Integral</span>
+                            <span class="text-green-600 font-bold">Completado 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 (Recursos) -->
+                <div class="portfolio-item bg-hueso-100 rounded-2xl overflow-hidden border border-hueso-300 group hover:shadow-xl transition-all duration-300" data-category="recursos">
+                    <div class="h-56 bg-mostaza-100/60 relative flex items-center justify-center p-8 overflow-hidden border-b border-hueso-300">
+                        <i data-lucide="book-marked" class="w-20 h-20 text-mostaza-600 opacity-80"></i>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-mostaza-600 bg-mostaza-100 px-3 py-1 rounded-full">Recursos Abiertos</span>
+                        <h3 class="font-serif text-xl font-bold text-marino">Manual de Diseño Instruccional Moderno</h3>
+                        <p class="text-xs text-marino-800/80 font-light leading-relaxed">
+                            Guía en formato PDF que aborda la psicología cognitiva aplicada al diseño instruccional interactivo móvil.
+                        </p>
+                        <div class="pt-4 border-t border-hueso-300 flex justify-between items-center text-xs">
+                            <span class="font-semibold text-marino">E-Book Descargable</span>
+                            <a href="#contacto" class="text-mostaza-600 font-bold hover:underline">Descargar gratis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section id="testimonios" class="py-24 md:py-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <!-- Title and Navigation Controls -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
+                <div class="max-w-xl">
+                    <span class="text-xs tracking-widest font-bold text-mostaza-500 uppercase block mb-2">QUÉ DICEN MIS ALUMNOS</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-light text-marino tracking-tight">
+                        Metodologías que inspiran <span class="font-bold italic">historias de éxito.</span>
+                    </h2>
+                </div>
+                <!-- Navigation Arrows -->
+                <div class="flex gap-3">
+                    <button onclick="prevTestimonial()" class="p-3 rounded-full border border-marino/20 hover:border-marino hover:bg-hueso-200 text-marino focus:outline-none" aria-label="Anterior testimonio">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="nextTestimonial()" class="p-3 rounded-full border border-marino/20 hover:border-marino hover:bg-hueso-200 text-marino focus:outline-none" aria-label="Siguiente testimonio">
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Slider / Card Container -->
+            <div class="relative min-h-[300px]">
+                <!-- Slide 1 (Active) -->
+                <div id="testimonial-1" class="testimonial-slide opacity-100 pointer-events-auto transition-all duration-500 absolute w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-hueso-200 border border-hueso-300 p-8 md:p-12 rounded-3xl">
+                    <div class="lg:col-span-8 space-y-6">
+                        <!-- Rating Stars -->
+                        <div class="flex gap-1 text-mostaza-500">
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                        </div>
+                        <blockquote class="font-serif text-xl sm:text-2xl text-marino-800 font-light italic leading-normal">
+                            "Gracias a la mentoría, mi academia de programación pasó de ser un conjunto de videos grabados a una comunidad activa y sumamente rentable. Su enfoque pedagógico transformó la retención de nuestros estudiantes de inmediato."
+                        </blockquote>
+                        <div>
+                            <cite class="font-bold text-marino not-italic block text-base">Ing. Alejandro Romero</cite>
+                            <span class="text-xs text-marino/70">Co-fundador de CodersHub Latinoamérica</span>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 flex justify-center lg:justify-end">
+                        <div class="w-24 h-24 rounded-full bg-marino text-hueso-100 flex items-center justify-center font-serif text-3xl font-bold border-4 border-hueso-100 shadow-lg">
+                            AR
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 (Hidden by default) -->
+                <div id="testimonial-2" class="testimonial-slide opacity-0 pointer-events-none transition-all duration-500 absolute w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-hueso-200 border border-hueso-300 p-8 md:p-12 rounded-3xl">
+                    <div class="lg:col-span-8 space-y-6">
+                        <div class="flex gap-1 text-mostaza-500">
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                            <i data-lucide="star" class="fill-current w-5 h-5"></i>
+                        </div>
+                        <blockquote class="font-serif text-xl sm:text-2xl text-marino-800 font-light italic leading-normal">
+                            "El bootcamp que diseñó para nuestro equipo de diseño instruccional superó todas las expectativas. Logró alinear metodologías ágiles de educación que hoy son parte de nuestra rutina de desarrollo."
+                        </blockquote>
+                        <div>
+                            <cite class="font-bold text-marino not-italic block text-base">Sofía Villarreal</cite>
+                            <span class="text-xs text-marino/70">VP of Learning, NextGen Global</span>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 flex justify-center lg:justify-end">
+                        <div class="w-24 h-24 rounded-full bg-mostaza-500 text-marino flex items-center justify-center font-serif text-3xl font-bold border-4 border-hueso-100 shadow-lg">
+                            SV
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contacto" class="py-24 md:py-32 bg-marino text-hueso-100 relative overflow-hidden">
+        <!-- Visual Backdrop element -->
+        <div class="absolute inset-0 z-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#ffffff 2px, transparent 2px); background-size: 40px 40px;"></div>
+
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
+            
+            <!-- Contact info Left -->
+            <div class="lg:col-span-5 space-y-8">
+                <div>
+                    <span class="text-xs tracking-widest font-bold text-mostaza-400 uppercase block mb-2">HAGAMOS EQUIPO</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-light text-hueso-50 tracking-tight leading-tight">
+                        ¿Tienes un proyecto <br><span class="font-bold italic text-mostaza-400">educativo en mente?</span>
+                    </h2>
+                </div>
+                
+                <p class="text-hueso-300 font-light leading-relaxed">
+                    Escríbeme para agendar una sesión preliminar de descubrimiento. Analizaremos tu plan educativo, tus necesidades técnicas y el mejor modelo pedagógico para potenciar tu marca.
+                </p>
+
+                <div class="space-y-6 pt-6 border-t border-marino-800">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-marino-800 flex items-center justify-center text-mostaza-400 shrink-0">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs text-hueso-300">Correo Electrónico</span>
+                            <a href="mailto:contacto@marianoeducacion.com" class="text-sm font-semibold hover:text-mostaza-400">contacto@marianoeducacion.com</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-marino-800 flex items-center justify-center text-mostaza-400 shrink-0">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs text-hueso-300">Ubicación</span>
+                            <span class="text-sm font-semibold">Cancún, Quintana Roo, México (Soporte Global)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Container Right -->
+            <div class="lg:col-span-7 bg-marino-800 p-8 sm:p-10 rounded-3xl border border-marino-800 shadow-2xl relative">
+                
+                <!-- Success Toast Box (Hidden by default, triggered by JS) -->
+                <div id="toast" class="hidden absolute inset-0 bg-marino-800 rounded-3xl flex flex-col items-center justify-center text-center p-8 z-20 transition-opacity duration-300">
+                    <div class="w-16 h-16 rounded-full bg-mostaza-100 flex items-center justify-center text-mostaza-600 mb-4 animate-bounce">
+                        <i data-lucide="check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-hueso-100">¡Mensaje Recibido!</h3>
+                    <p class="text-sm text-hueso-300 mt-2 max-w-sm">Me pondré en contacto contigo en las próximas 24 horas hábiles para estructurar tu propuesta pedagógica.</p>
+                    <button onclick="resetContactForm()" class="mt-8 text-xs font-bold text-mostaza-400 border border-mostaza-400 px-4 py-2 rounded-lg hover:bg-mostaza-400 hover:text-marino transition-all">
+                        Enviar otro mensaje
+                    </button>
+                </div>
+
+                <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nombre" class="block text-xs font-bold text-hueso-300 uppercase tracking-widest mb-2">Nombre Completo</label>
+                            <input type="text" id="nombre" name="nombre" required class="w-full bg-marino-900 border border-marino-800 focus:border-mostaza-400 rounded-lg py-3 px-4 text-hueso-100 placeholder:text-hueso-300/40 focus:outline-none text-sm transition-all" placeholder="Escribe tu nombre">
+                        </div>
+                        <div>
+                            <label for="correo" class="block text-xs font-bold text-hueso-300 uppercase tracking-widest mb-2">Correo de Contacto</label>
+                            <input type="email" id="correo" name="correo" required class="w-full bg-marino-900 border border-marino-800 focus:border-mostaza-400 rounded-lg py-3 px-4 text-hueso-100 placeholder:text-hueso-300/40 focus:outline-none text-sm transition-all" placeholder="tu@correo.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="servicio" class="block text-xs font-bold text-hueso-300 uppercase tracking-widest mb-2">Servicio de Interés</label>
+                        <select id="servicio" name="servicio" required class="w-full bg-marino-900 border border-marino-800 focus:border-mostaza-400 rounded-lg py-3.5 px-4 text-hueso-100 focus:outline-none text-sm transition-all">
+                            <option value="" disabled selected class="text-hueso-300/40">Selecciona una opción</option>
+                            <option value="individual" class="bg-marino-900">Mentoría 1-a-1 Directa</option>
+                            <option value="bootcamp" class="bg-marino-900">Bootcamps Corporativos</option>
+                            <option value="curriculo" class="bg-marino-900">Creación Curricular</option>
+                            <option value="otro" class="bg-marino-900">Otro tipo de consulta</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="mensaje" class="block text-xs font-bold text-hueso-300 uppercase tracking-widest mb-2">Detalles del Proyecto</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" required class="w-full bg-marino-900 border border-marino-800 focus:border-mostaza-400 rounded-lg py-3 px-4 text-hueso-100 placeholder:text-hueso-300/40 focus:outline-none text-sm transition-all resize-none" placeholder="Cuéntame sobre tu proyecto educativo, público objetivo, ideas generales, etc."></textarea>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="politica" name="politica" required class="accent-mostaza-400 rounded focus:ring-0">
+                        <label for="politica" class="text-xs text-hueso-300 font-light">Acepto los términos de contacto de la política de datos.</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-mostaza-500 text-marino hover:bg-mostaza-400 font-bold py-4 rounded-xl transition-all shadow-lg text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                        <span>Iniciar Conversación</span>
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-marino-900 text-hueso-200 border-t border-marino-800 py-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-2">
+                <span class="font-serif text-2xl font-black text-hueso-50">M.</span>
+                <span class="text-xs tracking-wider uppercase font-semibold text-hueso-300 border-l border-hueso-300/20 pl-2">Educación Profesional</span>
+            </div>
+            
+            <p class="text-xs text-hueso-300/60 font-light">
+                &copy; 2026 M. Educación. Todos los derechos reservados. Diseñado bajo principios de usabilidad UI/UX.
+            </p>
+
+            <div class="flex gap-4">
+                <a href="#" class="p-2 bg-marino-800 text-hueso-100 hover:bg-mostaza-500 hover:text-marino rounded-full text-xs" aria-label="Sígueme en LinkedIn">
+                    <i data-lucide="linkedin" class="w-4 h-4"></i>
+                </a>
+                <a href="#" class="p-2 bg-marino-800 text-hueso-100 hover:bg-mostaza-500 hover:text-marino rounded-full text-xs" aria-label="Sígueme en Twitter/X">
+                    <i data-lucide="twitter" class="w-4 h-4"></i>
+                </a>
+                <a href="#" class="p-2 bg-marino-800 text-hueso-100 hover:bg-mostaza-500 hover:text-marino rounded-full text-xs" aria-label="Sígueme en Youtube">
+                    <i data-lucide="youtube" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Responsive Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+        }
+
+        // About Me Tabs Interaction
+        function switchTab(activeTabId) {
+            const tabs = ['tab-metodo', 'tab-trayectoria'];
+            tabs.forEach(tabId => {
+                const element = document.getElementById(tabId);
+                const button = document.getElementById('btn-' + tabId);
+                
+                if (tabId === activeTabId) {
+                    element.classList.remove('hidden');
+                    button.classList.add('border-mostaza-500', 'text-marino');
+                    button.classList.remove('border-transparent', 'text-marino/60');
+                } else {
+                    element.classList.add('hidden');
+                    button.classList.remove('border-mostaza-500', 'text-marino');
+                    button.classList.add('border-transparent', 'text-marino/60');
+                }
+            });
+        }
+
+        // UI/UX Specs drawer toggle
+        function toggleUxSpecs() {
+            const drawer = document.getElementById('ux-specs-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        // Portfolio Category Filter Logic
+        function filterPortfolio(category) {
+            const items = document.querySelectorAll('.portfolio-item');
+            const buttons = ['all', 'cursos', 'consultoria', 'recursos'];
+            
+            // Toggle buttons look
+            buttons.forEach(btn => {
+                const buttonElement = document.getElementById('filter-' + btn);
+                if (btn === category) {
+                    buttonElement.className = "px-5 py-2 rounded-full font-bold bg-marino text-hueso-100 shadow-sm";
+                } else {
+                    buttonElement.className = "px-5 py-2 rounded-full font-semibold bg-hueso-100 hover:bg-mostaza-100 hover:text-marino text-marino/70 border border-hueso-300";
+                }
+            });
+
+            // Filter projects
+            items.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (category === 'all' || itemCategory === category) {
+                    item.classList.remove('hidden');
+                    item.classList.add('block');
+                } else {
+                    item.classList.add('hidden');
+                    item.classList.remove('block');
+                }
+            });
+        }
+
+        // Testimonial Slide Carousel Logic
+        let activeTestimonial = 1;
+        const totalTestimonials = 2;
+
+        function showTestimonial(idx) {
+            for (let i = 1; i <= totalTestimonials; i++) {
+                const slide = document.getElementById('testimonial-' + i);
+                if (i === idx) {
+                    slide.classList.remove('opacity-0', 'pointer-events-none');
+                    slide.classList.add('opacity-100', 'pointer-events-auto');
+                } else {
+                    slide.classList.add('opacity-0', 'pointer-events-none');
+                    slide.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+            }
+        }
+
+        function nextTestimonial() {
+            activeTestimonial = activeTestimonial === totalTestimonials ? 1 : activeTestimonial + 1;
+            showTestimonial(activeTestimonial);
+        }
+
+        function prevTestimonial() {
+            activeTestimonial = activeTestimonial === 1 ? totalTestimonials : activeTestimonial - 1;
+            showTestimonial(activeTestimonial);
+        }
+
+        // Form Submit simulation with inline Feedback toast
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            toast.classList.add('opacity-100');
+        }
+
+        function resetContactForm() {
+            const toast = document.getElementById('toast');
+            const form = document.getElementById('contact-form');
+            form.reset();
+            toast.classList.add('hidden');
+            toast.classList.remove('opacity-100');
+        }
+    </script>
+</body>
+</html>
